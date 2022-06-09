@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace NesaBotDesktop {
   internal class MarksLogic {
-    private readonly string _clientId = "cj79FSz1JQvZKpJY";
-    private readonly string _state = "wiesoChanMerEigentlichDeScheissLäärLohFrogezeiche";
+    private static readonly string _clientId = "cj79FSz1JQvZKpJY";
+    private static readonly string _state = "wiesoChanMerEigentlichDeScheissLäärLohFrogezeiche";
 
-    private RestClient _restClient = new RestClient();
+    private static RestClient _restClient = new RestClient();
     private string _nesaUrl;
 
     public MarksLogic(string nesaUrl) {
@@ -22,10 +22,22 @@ namespace NesaBotDesktop {
       }
     }
 
-    public string GetToken(string username, string password) {
-      var loginHash = GetLoginHash();
+    internal static bool IsUrlValid(string url) {
+      var loginHash = GetLoginHash(url);
 
-      var uri = new Uri($"{_nesaUrl}authorize.php?response_type=token&client_id={_clientId}&state={_state}&redirect_uri=https://www.schul-netz.com/mobile/oauth-callback.html");
+      return loginHash.Length > 0;
+    }
+
+    internal static bool IsLoginValid(string url, string username, string password) {
+      var token = GetToken(username, password, url);
+
+      return token.Length > 0;
+    }
+
+    private static string GetToken(string username, string password, string url) {
+      var loginHash = GetLoginHash(url);
+
+      var uri = new Uri($"{url}authorize.php?response_type=token&client_id={_clientId}&state={_state}&redirect_uri=https://www.schul-netz.com/mobile/oauth-callback.html");
       var request = new RestRequest(uri, Method.Post);
       request.AlwaysMultipartFormData = true;
       request.AddParameter("login", username);
@@ -48,8 +60,8 @@ namespace NesaBotDesktop {
       return "";
     }
 
-    private string GetLoginHash() {
-      var uri = new Uri($"{_nesaUrl}authorize.php?response_type=token&client_id={_clientId}&state={_state}");
+    private static string GetLoginHash(string url) {
+      var uri = new Uri($"{url}authorize.php?response_type=token&client_id={_clientId}&state={_state}");
       var request = new RestRequest(uri, Method.Get);
       RestResponse response = _restClient.Execute(request);
 
@@ -57,14 +69,18 @@ namespace NesaBotDesktop {
         return "";
       }
 
-      var loginHashIndex = response.Content.IndexOf("loginhash");
-      var loginHashCloseIndex = response.Content.IndexOf(">", loginHashIndex);
-      var valueIndex = response.Content.LastIndexOf("value", loginHashCloseIndex);
-      var valueStartIndex = response.Content.IndexOf("'", valueIndex);
-      var valueEndIndex = response.Content.IndexOf("'", valueIndex + 8);
+      if (response.Content.Contains("loginhash")) {
+        var loginHashIndex = response.Content.IndexOf("loginhash");
+        var loginHashCloseIndex = response.Content.IndexOf(">", loginHashIndex);
+        var valueIndex = response.Content.LastIndexOf("value", loginHashCloseIndex);
+        var valueStartIndex = response.Content.IndexOf("'", valueIndex);
+        var valueEndIndex = response.Content.IndexOf("'", valueIndex + 8);
 
-      var loginhash = response.Content.Substring(valueStartIndex + 1, valueEndIndex - valueStartIndex - 1);
-      return loginhash;
+        var loginhash = response.Content.Substring(valueStartIndex + 1, valueEndIndex - valueStartIndex - 1);
+        return loginhash;
+      }
+
+      return "";
     }
   }
 }
