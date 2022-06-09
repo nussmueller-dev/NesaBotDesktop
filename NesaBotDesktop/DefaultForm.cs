@@ -13,5 +13,14 @@ namespace NesaBotDesktop {
     public DefaultForm() {
       InitializeComponent();
     }
+
+    private void DefaultForm_Load(object sender, EventArgs e) {
+      var loginForm = new LoginForm();
+      loginForm.ShowDialog(this);
+
+      if (loginForm.DialogResult == DialogResult.Cancel) {
+        Close();
+      }
+    }
   }
 }
