@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NesaBotDesktop {
-  public partial class Settings : Form {
-    public Settings() {
+  public partial class SettingsForm : Form {
+    public SettingsForm() {
       InitializeComponent();
     }
   }

@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NesaBotDesktop {
-  public partial class Login : Form {
-    public Login() {
+  public partial class DefaultForm : Form {
+    public DefaultForm() {
       InitializeComponent();
     }
   }

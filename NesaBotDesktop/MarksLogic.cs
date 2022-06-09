@@ -12,15 +12,6 @@ namespace NesaBotDesktop {
     private static readonly string _state = "wiesoChanMerEigentlichDeScheissLäärLohFrogezeiche";
 
     private static RestClient _restClient = new RestClient();
-    private string _nesaUrl;
-
-    public MarksLogic(string nesaUrl) {
-      if (nesaUrl.EndsWith("/")) {
-        _nesaUrl = nesaUrl;
-      } else {
-        _nesaUrl = nesaUrl + "/";
-      }
-    }
 
     internal static bool IsUrlValid(string url) {
       var loginHash = GetLoginHash(url);
