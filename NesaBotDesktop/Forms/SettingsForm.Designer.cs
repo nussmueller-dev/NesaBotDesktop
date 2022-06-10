@@ -162,7 +162,7 @@
       // 
       this.btn_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.btn_cancel.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.btn_cancel.Location = new System.Drawing.Point(12, 400);
+      this.btn_cancel.Location = new System.Drawing.Point(12, 265);
       this.btn_cancel.Name = "btn_cancel";
       this.btn_cancel.Size = new System.Drawing.Size(97, 29);
       this.btn_cancel.TabIndex = 18;
@@ -174,7 +174,7 @@
       // 
       this.btn_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.btn_save.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-      this.btn_save.Location = new System.Drawing.Point(164, 400);
+      this.btn_save.Location = new System.Drawing.Point(164, 265);
       this.btn_save.Name = "btn_save";
       this.btn_save.Size = new System.Drawing.Size(93, 29);
       this.btn_save.TabIndex = 19;
@@ -186,7 +186,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(267, 441);
+      this.ClientSize = new System.Drawing.Size(267, 306);
       this.Controls.Add(this.btn_cancel);
       this.Controls.Add(this.btn_save);
       this.Controls.Add(this.lb_pushNotifications);

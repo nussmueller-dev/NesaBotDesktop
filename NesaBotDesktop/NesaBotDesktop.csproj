@@ -20,6 +20,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ApplicationSettings.settings</DependentUpon>
     </Compile>
+    <Compile Update="Properties\DiscordSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DiscordSettings.settings</DependentUpon>
+    </Compile>
     <Compile Update="Properties\NesaSettings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -43,6 +48,10 @@
     <None Update="Properties\ApplicationSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationSettings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Properties\DiscordSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>DiscordSettings.Designer.cs</LastGenOutput>
     </None>
     <None Update="Properties\NesaSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
