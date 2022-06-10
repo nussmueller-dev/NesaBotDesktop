@@ -37,7 +37,10 @@ namespace NesaBotDesktop.Logic {
     public static async Task Stop() {
       if (_isStarted) {
         await _client.StopAsync();
-        _mainTask?.Dispose();
+
+        try {
+          _mainTask?.Dispose();
+        } catch { }
 
         _isStarted = false;
       }

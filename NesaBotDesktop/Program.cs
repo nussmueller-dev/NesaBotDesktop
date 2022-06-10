@@ -1,5 +1,9 @@
 using NesaBotDesktop.Forms;
+using NesaBotDesktop.Logic;
 using System.Diagnostics;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Linq;
 
 namespace NesaBotDesktop {
   internal static class Program {
@@ -15,7 +19,7 @@ namespace NesaBotDesktop {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
       ApplicationConfiguration.Initialize();
-      Application.Run(new DashboardForm());
+      Application.Run(new NesaBotApplicationContext());
     }
 
     public static Process? PriorProcess() {
@@ -27,6 +31,99 @@ namespace NesaBotDesktop {
           return p;
       }
       return null!;
+    }
+  }
+
+  internal class NesaBotApplicationContext : ApplicationContext {
+    private NotifyIcon trayIcon;
+    private ContextMenuStrip contextMenu;
+    private DashboardForm dashboardForm = new DashboardForm();
+    private LoginForm loginForm = new LoginForm();
+    private SettingsForm settingsForm = new SettingsForm();
+
+    public NesaBotApplicationContext() {
+      contextMenu = new ContextMenuStrip {};
+
+      var dashboardItem = new ToolStripMenuItem() {
+        Text = "Dashboard"
+      };
+      dashboardItem.Click += ShowDashboard;
+      contextMenu.Items.Add(dashboardItem);
+
+      var settingsItem = new ToolStripMenuItem() {
+        Text = "Einstellungen"
+      };
+      settingsItem.Click += ShowSettings;
+      contextMenu.Items.Add(settingsItem);
+
+      var loginItem = new ToolStripMenuItem() {
+        Text = "Logindaten ändern"
+      };
+      loginItem.Click += ShowLogin;
+      contextMenu.Items.Add(loginItem);
+
+      contextMenu.Items.Add(new ToolStripSeparator());
+
+      var exitItem = new ToolStripMenuItem() {
+        Text = "Schiessen"
+      };
+      exitItem.Click += Exit;
+      contextMenu.Items.Add(exitItem);
+
+      trayIcon = new NotifyIcon() {
+        Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
+        Text = "NesaBot",
+        ContextMenuStrip = contextMenu,
+        Visible = true
+      };
+
+      trayIcon.Click += ShowDashboard;
+
+      DoDefaultStuff();
+    }
+
+    private void ShowDashboard(object sender, EventArgs e) {
+      MouseEventArgs mouseArgs = e as MouseEventArgs;
+
+      if (mouseArgs != null && mouseArgs.Button != MouseButtons.Left) {
+        return;
+      }
+
+      if (Application.OpenForms.OfType<DashboardForm>().Count() == 0) {
+        Task.Run(() => dashboardForm.Show());
+      } 
+    }
+
+    private void ShowSettings(object sender, EventArgs e) {
+      if (Application.OpenForms.OfType<SettingsForm>().Count() == 0) {
+        Task.Run(() => { 
+          settingsForm.ShowDialog(); 
+          DoDefaultStuff();
+        });
+      }
+    }
+
+    private void ShowLogin(object sender, EventArgs e) {
+      if (Application.OpenForms.OfType<LoginForm>().Count() == 0) {
+        Task.Run(() => {
+          loginForm.ShowDialog();
+          DoDefaultStuff();
+        });
+      }
+    }
+
+    private async void Exit(object sender, EventArgs e) {
+      await DiscordLogic.Stop();
+
+      trayIcon.Visible = false;
+
+      Application.Exit();
+    }
+
+    private async void DoDefaultStuff() {
+      if (Properties.ApplicationSettings.Default.EnableDiscordBot && await DiscordLogic.IsTokenValid(Properties.ApplicationSettings.Default.DiscordBotToken)) {
+        DiscordLogic.Start(Properties.ApplicationSettings.Default.DiscordBotToken);
+      }
     }
   }
 }
