@@ -84,7 +84,7 @@ namespace NesaBotDesktop.Logic {
         var request = new RestRequest(uri, Method.Get);
         request.Timeout = _timeout;
         response = _restClient.Execute(request);
-      } catch (Exception e) {
+      } catch {
         return "";
       }
 
