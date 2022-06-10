@@ -34,6 +34,8 @@
       this.tb_botToken = new System.Windows.Forms.TextBox();
       this.lb_pushNotifications = new System.Windows.Forms.Label();
       this.cb_pushNotifications = new System.Windows.Forms.CheckBox();
+      this.btn_cancel = new System.Windows.Forms.Button();
+      this.btn_save = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.ns_interval)).BeginInit();
       this.SuspendLayout();
       // 
@@ -156,11 +158,37 @@
       this.cb_pushNotifications.TabIndex = 16;
       this.cb_pushNotifications.UseVisualStyleBackColor = true;
       // 
+      // btn_cancel
+      // 
+      this.btn_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.btn_cancel.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.btn_cancel.Location = new System.Drawing.Point(12, 400);
+      this.btn_cancel.Name = "btn_cancel";
+      this.btn_cancel.Size = new System.Drawing.Size(97, 29);
+      this.btn_cancel.TabIndex = 18;
+      this.btn_cancel.Text = "Abbrechen";
+      this.btn_cancel.UseVisualStyleBackColor = true;
+      this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
+      // 
+      // btn_save
+      // 
+      this.btn_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.btn_save.Font = new System.Drawing.Font("Roboto", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+      this.btn_save.Location = new System.Drawing.Point(164, 400);
+      this.btn_save.Name = "btn_save";
+      this.btn_save.Size = new System.Drawing.Size(93, 29);
+      this.btn_save.TabIndex = 19;
+      this.btn_save.Text = "Speichern";
+      this.btn_save.UseVisualStyleBackColor = true;
+      this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
+      // 
       // SettingsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(267, 441);
+      this.Controls.Add(this.btn_cancel);
+      this.Controls.Add(this.btn_save);
       this.Controls.Add(this.lb_pushNotifications);
       this.Controls.Add(this.cb_pushNotifications);
       this.Controls.Add(this.tb_botToken);
@@ -193,5 +221,7 @@
     private TextBox tb_botToken;
     private Label lb_pushNotifications;
     private CheckBox cb_pushNotifications;
+    private Button btn_cancel;
+    private Button btn_save;
   }
 }

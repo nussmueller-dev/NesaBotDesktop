@@ -19,9 +19,11 @@ namespace NesaBotDesktop {
 
     private void cb_activateDiscordBot_CheckedChanged(object sender, EventArgs e) {
       tb_botToken.Enabled = cb_activateDiscordBot.Checked;
+      lb_botToken.Enabled = cb_activateDiscordBot.Checked;
     }
 
-    private void Save() {
+    private void btn_save_Click(object sender, EventArgs e) {
+#if (!DEBUG)
       RegistryKey? key = Registry.CurrentUser.OpenSubKey(_startupRegistryKey, true);
       try {
         if (cb_autostart.Checked) {
@@ -30,12 +32,22 @@ namespace NesaBotDesktop {
           key?.DeleteValue(_startupRegistryKeyValue);
         }
       } catch { }
+#endif
 
       Properties.ApplicationSettings.Default.Interval = (int)ns_interval.Value;
       Properties.ApplicationSettings.Default.Autostart = cb_autostart.Checked;
       Properties.ApplicationSettings.Default.PushNotifications = cb_pushNotifications.Checked;
       Properties.ApplicationSettings.Default.EnableDiscordBot = cb_activateDiscordBot.Checked;
       Properties.ApplicationSettings.Default.DiscordBotToken = tb_botToken.Text;
+      Properties.ApplicationSettings.Default.Save();
+
+      DialogResult = DialogResult.OK;
+      Close();
+    }
+
+    private void btn_cancel_Click(object sender, EventArgs e) {
+      DialogResult = DialogResult.Cancel;
+      Close();
     }
   }
 }

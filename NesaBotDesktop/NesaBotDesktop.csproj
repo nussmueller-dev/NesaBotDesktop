@@ -14,6 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\ApplicationSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ApplicationSettings.settings</DependentUpon>
+    </Compile>
     <Compile Update="Properties\NesaSettings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -34,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Properties\ApplicationSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ApplicationSettings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="Properties\NesaSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>NesaSettings.Designer.cs</LastGenOutput>
