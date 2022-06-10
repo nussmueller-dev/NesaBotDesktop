@@ -79,6 +79,8 @@ namespace NesaBotDesktop {
 
       trayIcon.Click += ShowDashboard;
 
+      PopupLogic.TrayIcon = trayIcon;
+
       DoDefaultStuff();
     }
 
@@ -90,8 +92,14 @@ namespace NesaBotDesktop {
       }
 
       if (Application.OpenForms.OfType<DashboardForm>().Count() == 0) {
+        dashboardForm = new DashboardForm();
         Task.Run(() => dashboardForm.Show());
-      } 
+      } else {
+        var form = Application.OpenForms.OfType<DashboardForm>().First();
+        form.Close();
+        dashboardForm = new DashboardForm();
+        Task.Run(() => dashboardForm.Show());
+      }
     }
 
     private void ShowSettings(object sender, EventArgs e) {
@@ -123,6 +131,10 @@ namespace NesaBotDesktop {
     private async void DoDefaultStuff() {
       if (Properties.ApplicationSettings.Default.EnableDiscordBot && await DiscordLogic.IsTokenValid(Properties.ApplicationSettings.Default.DiscordBotToken)) {
         DiscordLogic.Start(Properties.ApplicationSettings.Default.DiscordBotToken);
+      }
+
+      if (MarksLogic.IsLoginValid(Properties.NesaSettings.Default.URL, Properties.NesaSettings.Default.Username, Properties.NesaSettings.Default.Password)) {
+        MarksLogic.StartMainLoop();
       }
     }
   }

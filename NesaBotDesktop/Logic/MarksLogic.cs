@@ -1,11 +1,8 @@
-﻿using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using NesaBotDesktop.Models;
+using Newtonsoft.Json;
+using RestSharp;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace NesaBotDesktop.Logic {
   internal class MarksLogic {
@@ -13,8 +10,11 @@ namespace NesaBotDesktop.Logic {
     private static readonly string _state = "wiesoChanMerEigentlichDeScheissLäärLohFrogezeiche";
     private static readonly string _urlRegex = @"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)";
     private static readonly int _timeout = 2000;
+    private static readonly RestClient _restClient = new RestClient();
 
-    private static RestClient _restClient = new RestClient();
+    private static Task? _mainTask;
+    private static bool _mainTaskIsStarted = false;
+    private static string _token = "";
 
     internal static bool IsLoginValid(string url, string username, string password) {
       if (!IsUrlValid(url)) {
@@ -45,6 +45,97 @@ namespace NesaBotDesktop.Logic {
       RestResponse response = _restClient.Execute(request);
 
       return response.IsSuccessful;
+    }
+
+    internal static void StartMainLoop() {
+      if (_mainTaskIsStarted) {
+        StopMainLoop();
+      }
+
+      _token = GetToken(Properties.NesaSettings.Default.Username, Properties.NesaSettings.Default.Password, Properties.NesaSettings.Default.URL);
+
+      _mainTask = Task.Run(() => MainAsync());
+      _mainTaskIsStarted = true;
+    }
+
+    internal static void StopMainLoop() {
+      try {
+        _mainTask?.Dispose();
+      } catch { }
+
+      _mainTaskIsStarted = false;
+    }
+
+    internal static string NormalizeUrl(string url) {
+      if (!url.EndsWith("/")) {
+        url += "/";
+      }
+
+      if (!(url.StartsWith("https://") || url.StartsWith("http://"))) {
+        url = "https://" + url;
+      }
+
+      if (url.StartsWith("http://")) {
+        url = url.Replace("http://", "https://");
+      }
+
+      var lastSlashIndex = 0;
+
+      for (int i = 0; i < 3; i++) {
+        lastSlashIndex = url.IndexOf("/", lastSlashIndex + 1);
+      }
+
+      url = url.Substring(0, lastSlashIndex + 1);
+
+      return url;
+    }
+
+    private static void MainAsync() {
+      while (_mainTaskIsStarted) {
+        var marks = GetMarks();
+
+        if (marks is null) {
+          Thread.Sleep(300000); //5min
+          continue;
+        }
+
+        if (Properties.ApplicationSettings.Default.EnableDiscordBot) {
+          CheckSettingsForNull();
+          foreach (var mark in marks.Where(x => !Properties.DiscordSettings.Default.InformedMarks.Contains(x.Id))) {
+            DiscordLogic.NewMark(mark);
+          }
+        }
+
+        CheckSettingsForNull();
+        if (Properties.ApplicationSettings.Default.PushNotifications && marks.Any(x => !Properties.ApplicationSettings.Default.PushNotificationsInformedMarks.Contains(x.Id))) {
+          PopupLogic.ShowPushNotification("Neue Noten verfügbar", "Es wurden neue Noten veröffentlicht, schau doch mal vorbei");
+
+          foreach (var mark in marks.Where(x => !Properties.ApplicationSettings.Default.PushNotificationsInformedMarks.Contains(x.Id))) {
+            Properties.ApplicationSettings.Default.PushNotificationsInformedMarks.Add(mark.Id);
+          }
+
+          Properties.ApplicationSettings.Default.Save();
+        }
+
+        Thread.Sleep(Properties.ApplicationSettings.Default.Interval * 60000);
+      }
+    }
+
+    private static List<MarkModel> GetMarks() {
+      var uri = new Uri($"{Properties.NesaSettings.Default.URL}rest/v1/me/grades");
+      var request = new RestRequest(uri, Method.Get);
+      request.Timeout = _timeout;
+      request.AddHeader("Authorization", $"Bearer {_token}");
+      RestResponse response = _restClient.Execute(request);
+
+      if (response.StatusCode == HttpStatusCode.OK && response.Content != null) {
+        return JsonConvert.DeserializeObject<List<MarkModel>>(response.Content);
+      } else if (response.StatusCode == HttpStatusCode.Unauthorized) {
+        _token = GetToken(Properties.NesaSettings.Default.Username, Properties.NesaSettings.Default.Password, Properties.NesaSettings.Default.URL);
+        return null;
+      } else {
+        return null;
+      }
     }
 
     private static string GetToken(string username, string password, string url) {
@@ -106,28 +197,14 @@ namespace NesaBotDesktop.Logic {
       return "";
     }
 
-    private static string NormalizeUrl(string url) {
-      if (!url.EndsWith("/")) {
-        url += "/";
+    private static void CheckSettingsForNull() {
+      if (Properties.DiscordSettings.Default.InformedMarks is null) {
+        Properties.DiscordSettings.Default.InformedMarks = new System.Collections.Specialized.StringCollection();
       }
 
-      if (!(url.StartsWith("https://") || url.StartsWith("http://"))) {
-        url = "https://" + url;
+      if (Properties.ApplicationSettings.Default.PushNotificationsInformedMarks is null) {
+        Properties.ApplicationSettings.Default.PushNotificationsInformedMarks = new System.Collections.Specialized.StringCollection();
       }
-
-      if (url.StartsWith("http://")) {
-        url = url.Replace("http://", "https://");
-      }
-
-      var lastSlashIndex = 0;
-
-      for (int i = 0; i < 3; i++) {
-        lastSlashIndex = url.IndexOf("/", lastSlashIndex + 1);
-      }
-
-      url = url.Substring(0, lastSlashIndex + 1);
-
-      return url;
     }
   }
 }

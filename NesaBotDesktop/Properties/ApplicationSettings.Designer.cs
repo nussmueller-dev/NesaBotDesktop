@@ -82,5 +82,16 @@ namespace NesaBotDesktop.Properties {
                 this["PushNotifications"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection PushNotificationsInformedMarks {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["PushNotificationsInformedMarks"]));
+            }
+            set {
+                this["PushNotificationsInformedMarks"] = value;
+            }
+        }
     }
 }

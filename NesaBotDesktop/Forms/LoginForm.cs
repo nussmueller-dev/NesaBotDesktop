@@ -65,7 +65,7 @@ namespace NesaBotDesktop {
         return;
       }
 
-      Properties.NesaSettings.Default.URL = url;
+      Properties.NesaSettings.Default.URL = MarksLogic.NormalizeUrl(url);
       Properties.NesaSettings.Default.Username = username;
       Properties.NesaSettings.Default.Password = password;
 

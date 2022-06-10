@@ -44,5 +44,16 @@ namespace NesaBotDesktop.Properties {
                 this["DmUsers"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection InformedMarks {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["InformedMarks"]));
+            }
+            set {
+                this["InformedMarks"] = value;
+            }
+        }
     }
 }

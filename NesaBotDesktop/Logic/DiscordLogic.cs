@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using NesaBotDesktop.Models;
 
 namespace NesaBotDesktop.Logic {
   internal static class DiscordLogic {
@@ -46,14 +47,14 @@ namespace NesaBotDesktop.Logic {
       }
     }
 
-    public static async void NewMark(string subjectName, string markTitle, string markWeighting) {
+    public static async void NewMark(MarkModel mark) {
       CheckSettingsForNull();
 
       if (_isStarted) {
         var messageText = "Eine neue Note wurde auf Nesa zur Verfügung gestellt: \n";
-        messageText += $":arrow_right: Fach: {subjectName}\n";
-        messageText += $":arrow_right: Beschreibung: {markTitle}\n";
-        messageText += $":arrow_right: Gewichtung: {markWeighting}\n";
+        messageText += $":arrow_right: Fach: {mark.Course}\n";
+        messageText += $":arrow_right: Beschreibung: {mark.Title}\n";
+        messageText += $":arrow_right: Gewichtung: {mark.Weight}\n";
 
         foreach (var chanelId in Properties.DiscordSettings.Default.JoinedChanels) {
           var chanel = await _client.GetChannelAsync(ulong.Parse(chanelId!));
@@ -70,6 +71,9 @@ namespace NesaBotDesktop.Logic {
 
           await dmUser.SendMessageAsync(messageText);
         }
+
+        Properties.DiscordSettings.Default.InformedMarks.Add(mark.Id);
+        Properties.DiscordSettings.Default.Save();
       }
     }
 
@@ -168,6 +172,10 @@ namespace NesaBotDesktop.Logic {
 
       if (Properties.DiscordSettings.Default.JoinedChanels is null) {
         Properties.DiscordSettings.Default.JoinedChanels = new System.Collections.Specialized.StringCollection();
+      }
+
+      if (Properties.DiscordSettings.Default.InformedMarks is null) {
+        Properties.DiscordSettings.Default.InformedMarks = new System.Collections.Specialized.StringCollection();
       }
     }
 
