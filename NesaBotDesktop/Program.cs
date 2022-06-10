@@ -1,3 +1,5 @@
+using NesaBotDesktop.Forms;
+
 namespace NesaBotDesktop {
   internal static class Program {
     /// <summary>
@@ -8,7 +10,7 @@ namespace NesaBotDesktop {
       // To customize application configuration such as set high DPI settings or default font,
       // see https://aka.ms/applicationconfiguration.
       ApplicationConfiguration.Initialize();
-      Application.Run(new DefaultForm());
+      Application.Run(new DashboardForm());
     }
   }
 }

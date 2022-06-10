@@ -1,5 +1,5 @@
-﻿namespace NesaBotDesktop {
-  partial class DefaultForm {
+﻿namespace NesaBotDesktop.Forms {
+  partial class DashboardForm {
     /// <summary>
     /// Required designer variable.
     /// </summary>
@@ -25,14 +25,14 @@
     private void InitializeComponent() {
       this.SuspendLayout();
       // 
-      // DefaultForm
+      // DashboardForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 450);
-      this.Name = "DefaultForm";
-      this.Text = "Default";
-      this.Load += new System.EventHandler(this.DefaultForm_Load);
+      this.Name = "DashboardForm";
+      this.Text = "DashboardForm";
+      this.Load += new System.EventHandler(this.DashboardForm_Load);
       this.ResumeLayout(false);
 
     }

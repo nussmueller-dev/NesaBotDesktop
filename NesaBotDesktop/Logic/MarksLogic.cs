@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace NesaBotDesktop {
+namespace NesaBotDesktop.Logic {
   internal class MarksLogic {
     private static readonly string _clientId = "cj79FSz1JQvZKpJY";
     private static readonly string _state = "wiesoChanMerEigentlichDeScheissLäärLohFrogezeiche";
@@ -121,7 +121,7 @@ namespace NesaBotDesktop {
 
       var lastSlashIndex = 0;
 
-      for (int i = 0; i < 3; i ++) {
+      for (int i = 0; i < 3; i++) {
         lastSlashIndex = url.IndexOf("/", lastSlashIndex + 1);
       }
 

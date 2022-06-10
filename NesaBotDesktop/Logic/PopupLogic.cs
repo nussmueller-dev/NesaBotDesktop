@@ -1,4 +1,4 @@
-﻿namespace NesaBotDesktop {
+﻿namespace NesaBotDesktop.Logic {
   public static class PopupLogic {
     public static void ShowErrorMessage(string message, string title = "") {
       MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
