@@ -1,4 +1,5 @@
 ﻿using NesaBotDesktop.Logic;
+using System.Reflection;
 
 namespace NesaBotDesktop.Forms {
   public partial class DashboardForm : Form {
@@ -7,7 +8,7 @@ namespace NesaBotDesktop.Forms {
     }
 
     private void DashboardForm_Load(object sender, EventArgs e) {
-
+      Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
     }
 
     private void pb_account_Click(object sender, EventArgs e) {
@@ -15,6 +16,7 @@ namespace NesaBotDesktop.Forms {
 
       if (Application.OpenForms.OfType<LoginForm>().Count() == 0) {
         loginForm.ShowDialog();
+        UtilLogic.DoDefaultStuff();
       } 
     }
 
@@ -23,6 +25,7 @@ namespace NesaBotDesktop.Forms {
 
       if (Application.OpenForms.OfType<SettingsForm>().Count() == 0) {
         settingsForm.ShowDialog();
+        UtilLogic.DoDefaultStuff();
       } 
     }
   }

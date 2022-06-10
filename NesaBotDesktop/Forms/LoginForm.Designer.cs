@@ -182,6 +182,8 @@
       this.Controls.Add(this.lb_username);
       this.Controls.Add(this.tb_password);
       this.Controls.Add(this.tb_username);
+      this.MaximumSize = new System.Drawing.Size(348, 366);
+      this.MinimumSize = new System.Drawing.Size(348, 366);
       this.Name = "LoginForm";
       this.Text = "Login";
       this.Load += new System.EventHandler(this.LoginForm_Load);

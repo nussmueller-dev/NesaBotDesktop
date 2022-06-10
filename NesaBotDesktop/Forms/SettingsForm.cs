@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using NesaBotDesktop.Logic;
+using System.Reflection;
 
 namespace NesaBotDesktop {
   public partial class SettingsForm : Form {
@@ -11,6 +12,8 @@ namespace NesaBotDesktop {
     }
 
     private void SettingsForm_Load(object sender, EventArgs e) {
+      Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+
       ns_interval.Value = Properties.ApplicationSettings.Default.Interval;
       cb_autostart.Checked = Properties.ApplicationSettings.Default.Autostart;
       cb_pushNotifications.Checked = Properties.ApplicationSettings.Default.PushNotifications;

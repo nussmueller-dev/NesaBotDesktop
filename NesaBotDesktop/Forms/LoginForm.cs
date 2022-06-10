@@ -1,4 +1,5 @@
 ﻿using NesaBotDesktop.Logic;
+using System.Reflection;
 
 namespace NesaBotDesktop {
   public partial class LoginForm : Form {
@@ -7,6 +8,8 @@ namespace NesaBotDesktop {
     }
 
     private void LoginForm_Load(object sender, EventArgs e) {
+      Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+
       tb_url.Text = Properties.NesaSettings.Default.URL;
       tb_username.Text = Properties.NesaSettings.Default.Username;
       tb_password.Text = Properties.NesaSettings.Default.Password;
