@@ -184,6 +184,7 @@
       this.Controls.Add(this.tb_username);
       this.Name = "LoginForm";
       this.Text = "Login";
+      this.Load += new System.EventHandler(this.LoginForm_Load);
       ((System.ComponentModel.ISupportInitialize)(this.pb_errorArrowUrl)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.pb_errorArrowUsername)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.pb_errorArrowPassword)).EndInit();

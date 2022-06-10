@@ -16,6 +16,16 @@ namespace NesaBotDesktop {
 
     private static RestClient _restClient = new RestClient();
 
+    internal static bool IsLoginValid(string url, string username, string password) {
+      if (!IsUrlValid(url)) {
+        return false;
+      }
+
+      var token = GetToken(username, password, url);
+
+      return token.Length > 0;
+    }
+
     internal static bool IsUrlValid(string url) {
       Regex rgx = new Regex(_urlRegex, RegexOptions.Compiled);
 
@@ -26,12 +36,6 @@ namespace NesaBotDesktop {
       var loginHash = GetLoginHash(url);
 
       return loginHash.Length > 0;
-    }
-
-    internal static bool IsLoginValid(string url, string username, string password) {
-      var token = GetToken(username, password, url);
-
-      return token.Length > 0;
     }
 
     internal static bool IsInternetAvailable() {
@@ -110,6 +114,18 @@ namespace NesaBotDesktop {
       if (!(url.StartsWith("https://") || url.StartsWith("http://"))) {
         url = "https://" + url;
       }
+
+      if (url.StartsWith("http://")) {
+        url = url.Replace("http://", "https://");
+      }
+
+      var lastSlashIndex = 0;
+
+      for (int i = 0; i < 3; i ++) {
+        lastSlashIndex = url.IndexOf("/", lastSlashIndex + 1);
+      }
+
+      url = url.Substring(0, lastSlashIndex + 1);
 
       return url;
     }

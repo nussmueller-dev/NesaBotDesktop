@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace NesaBotDesktop {
   public partial class LoginForm : Form {
     public LoginForm() {
       InitializeComponent();
+    }
+
+    private void LoginForm_Load(object sender, EventArgs e) {
+      tb_url.Text = Properties.NesaSettings.Default.URL;
+      tb_username.Text = Properties.NesaSettings.Default.Username;
+      tb_password.Text = Properties.NesaSettings.Default.Password;
     }
 
     private void btn_cancel_Click(object sender, EventArgs e) {
@@ -42,12 +49,12 @@ namespace NesaBotDesktop {
       if (username.Length == 0) {
         pb_errorArrowUsername.Visible = true;
         isEveryInputFilled = false;
-      } 
+      }
 
       if (password.Length == 0) {
         pb_errorArrowPassword.Visible = true;
         isEveryInputFilled = false;
-      } 
+      }
 
       if (!isEveryInputFilled) {
         PopupLogic.ShowErrorMessage("Bitte alle Felder ausfüllen", "Invalide Eingabe");
@@ -58,7 +65,22 @@ namespace NesaBotDesktop {
         PopupLogic.ShowErrorMessage("Die URL ist ungültig", "Invalide Eingabe");
         pb_errorArrowUrl.Visible = true;
         return;
-      } 
+      }
+
+      if (!MarksLogic.IsLoginValid(url, username, password)) {
+        PopupLogic.ShowErrorMessage("Die Logindaten sind ungültig", "Invalide Eingabe");
+        pb_errorArrowUsername.Visible = true;
+        pb_errorArrowPassword.Visible = true;
+        return;
+      }
+
+      Properties.NesaSettings.Default.URL = url;
+      Properties.NesaSettings.Default.Username = username;
+      Properties.NesaSettings.Default.Password = password;
+
+      Properties.NesaSettings.Default.Save();
+
+      Close();
     }
   }
 }
