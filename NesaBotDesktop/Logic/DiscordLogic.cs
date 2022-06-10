@@ -43,9 +43,30 @@ namespace NesaBotDesktop.Logic {
       }
     }
 
-    public static void NewMark(string subjectName) {
+    public static async void NewMark(string subjectName, string markTitle, string markWeighting) {
+      CheckSettingsForNull();
+
       if (_isStarted) {
-        
+        var messageText = "Eine neue Note wurde auf Nesa zur Verfügung gestellt: \n";
+        messageText += $":arrow_right: Fach: {subjectName}\n";
+        messageText += $":arrow_right: Beschreibung: {markTitle}\n";
+        messageText += $":arrow_right: Gewichtung: {markWeighting}\n";
+
+        foreach (var chanelId in Properties.DiscordSettings.Default.JoinedChanels) {
+          var chanel = await _client.GetChannelAsync(ulong.Parse(chanelId!));
+
+          if(chanel.GetChannelType() == ChannelType.Text) {
+            var textChanel = chanel as ITextChannel;
+
+            await textChanel!.SendMessageAsync(messageText);
+          }
+        }
+
+        foreach (var dmUserId in Properties.DiscordSettings.Default.DmUsers) {
+          var dmUser = await _client.GetUserAsync(ulong.Parse(dmUserId!));
+
+          await dmUser.SendMessageAsync(messageText);
+        }
       }
     }
 
@@ -83,9 +104,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void Join(SocketUserMessage message) {
-      if (Properties.DiscordSettings.Default.JoinedChanels is null) {
-        Properties.DiscordSettings.Default.JoinedChanels = new System.Collections.Specialized.StringCollection();
-      }
+      CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.JoinedChanels.Contains(message.Channel.Id.ToString())) {
         await message.ReplyAsync("Wie ich bereits erwähnt hatte, werde ich euch hier über neue Noten informieren");
@@ -98,9 +117,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void Leave(SocketUserMessage message) {
-      if (Properties.DiscordSettings.Default.JoinedChanels is null) {
-        Properties.DiscordSettings.Default.JoinedChanels = new System.Collections.Specialized.StringCollection();
-      }
+      CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.JoinedChanels.Contains(message.Channel.Id.ToString())) {
         Properties.DiscordSettings.Default.JoinedChanels.Remove(message.Channel.Id.ToString());
@@ -116,9 +133,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void DM(SocketUserMessage message) {
-      if (Properties.DiscordSettings.Default.DmUsers is null) {
-        Properties.DiscordSettings.Default.DmUsers = new System.Collections.Specialized.StringCollection();
-      }
+      CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.DmUsers.Contains(message.Author.Id.ToString())) {
         await message.ReplyAsync("Wie ich bereits erwähnt hatte, werde ich dich auch persönlich über neue Noten informieren");
@@ -131,9 +146,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void StopDM(SocketUserMessage message) {
-      if (Properties.DiscordSettings.Default.DmUsers is null) {
-        Properties.DiscordSettings.Default.DmUsers = new System.Collections.Specialized.StringCollection();
-      }
+      CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.DmUsers.Contains(message.Author.Id.ToString())) {
         Properties.DiscordSettings.Default.DmUsers.Remove(message.Author.Id.ToString());
@@ -142,6 +155,16 @@ namespace NesaBotDesktop.Logic {
         await message.ReplyAsync("Ich werde dich von nun an nicht mehr persönlich informieren");
       } else {
         await message.ReplyAsync("Ich war schon immer zu faul um dich persönlich zu informieren");
+      }
+    }
+
+    private static void CheckSettingsForNull() {
+      if (Properties.DiscordSettings.Default.DmUsers is null) {
+        Properties.DiscordSettings.Default.DmUsers = new System.Collections.Specialized.StringCollection();
+      }
+
+      if (Properties.DiscordSettings.Default.JoinedChanels is null) {
+        Properties.DiscordSettings.Default.JoinedChanels = new System.Collections.Specialized.StringCollection();
       }
     }
 
