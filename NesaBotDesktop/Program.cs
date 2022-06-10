@@ -1,4 +1,5 @@
 using NesaBotDesktop.Forms;
+using System.Diagnostics;
 
 namespace NesaBotDesktop {
   internal static class Program {
@@ -7,10 +8,25 @@ namespace NesaBotDesktop {
     /// </summary>
     [STAThread]
     static void Main() {
-      // To customize application configuration such as set high DPI settings or default font,
-      // see https://aka.ms/applicationconfiguration.
+      if (PriorProcess() != null) {
+        return;
+      }
+
+      Application.EnableVisualStyles();
+      Application.SetCompatibleTextRenderingDefault(false);
       ApplicationConfiguration.Initialize();
       Application.Run(new DashboardForm());
+    }
+
+    public static Process? PriorProcess() {
+      Process curr = Process.GetCurrentProcess();
+      Process[] procs = Process.GetProcessesByName(curr.ProcessName);
+      foreach (Process p in procs) {
+        if ((p.Id != curr.Id) &&
+            (p.MainModule!.FileName == curr.MainModule!.FileName))
+          return p;
+      }
+      return null!;
     }
   }
 }

@@ -5,7 +5,7 @@
     }
 
     private void DashboardForm_Load(object sender, EventArgs e) {
-      var loginForm = new LoginForm();
+      var loginForm = new SettingsForm();
       loginForm.ShowDialog(this);
 
       if (loginForm.DialogResult == DialogResult.Cancel) {
