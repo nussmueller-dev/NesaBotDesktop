@@ -7,15 +7,23 @@ namespace NesaBotDesktop.Forms {
     }
 
     private void DashboardForm_Load(object sender, EventArgs e) {
+
+    }
+
+    private void pb_account_Click(object sender, EventArgs e) {
+      var loginForm = new LoginForm();
+
+      if (Application.OpenForms.OfType<LoginForm>().Count() == 0) {
+        loginForm.ShowDialog();
+      } 
+    }
+
+    private void pb_settings_Click(object sender, EventArgs e) {
       var settingsForm = new SettingsForm();
-      settingsForm.ShowDialog(this);
 
-      if (settingsForm.DialogResult == DialogResult.Cancel) {
-        Close();
-        return;
-      }
-
-      DiscordLogic.Start(Properties.ApplicationSettings.Default.DiscordBotToken);
+      if (Application.OpenForms.OfType<SettingsForm>().Count() == 0) {
+        settingsForm.ShowDialog();
+      } 
     }
   }
 }

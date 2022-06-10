@@ -48,7 +48,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     public static async void NewMark(MarkModel mark) {
-      CheckSettingsForNull();
+      UtilLogic.CheckSettingsForNull();
 
       if (_isStarted) {
         var messageText = "Eine neue Note wurde auf Nesa zur Verfügung gestellt: \n";
@@ -111,7 +111,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void Join(SocketUserMessage message) {
-      CheckSettingsForNull();
+      UtilLogic.CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.JoinedChanels.Contains(message.Channel.Id.ToString())) {
         await message.ReplyAsync("Wie ich bereits erwähnt hatte, werde ich euch hier über neue Noten informieren");
@@ -124,7 +124,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void Leave(SocketUserMessage message) {
-      CheckSettingsForNull();
+      UtilLogic.CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.JoinedChanels.Contains(message.Channel.Id.ToString())) {
         Properties.DiscordSettings.Default.JoinedChanels.Remove(message.Channel.Id.ToString());
@@ -140,7 +140,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void DM(SocketUserMessage message) {
-      CheckSettingsForNull();
+      UtilLogic.CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.DmUsers.Contains(message.Author.Id.ToString())) {
         await message.ReplyAsync("Wie ich bereits erwähnt hatte, werde ich dich auch persönlich über neue Noten informieren");
@@ -153,7 +153,7 @@ namespace NesaBotDesktop.Logic {
     }
 
     private static async void StopDM(SocketUserMessage message) {
-      CheckSettingsForNull();
+      UtilLogic.CheckSettingsForNull();
 
       if (Properties.DiscordSettings.Default.DmUsers.Contains(message.Author.Id.ToString())) {
         Properties.DiscordSettings.Default.DmUsers.Remove(message.Author.Id.ToString());
@@ -162,20 +162,6 @@ namespace NesaBotDesktop.Logic {
         await message.ReplyAsync("Ich werde dich von nun an nicht mehr persönlich informieren");
       } else {
         await message.ReplyAsync("Ich war schon immer zu faul um dich persönlich zu informieren");
-      }
-    }
-
-    private static void CheckSettingsForNull() {
-      if (Properties.DiscordSettings.Default.DmUsers is null) {
-        Properties.DiscordSettings.Default.DmUsers = new System.Collections.Specialized.StringCollection();
-      }
-
-      if (Properties.DiscordSettings.Default.JoinedChanels is null) {
-        Properties.DiscordSettings.Default.JoinedChanels = new System.Collections.Specialized.StringCollection();
-      }
-
-      if (Properties.DiscordSettings.Default.InformedMarks is null) {
-        Properties.DiscordSettings.Default.InformedMarks = new System.Collections.Specialized.StringCollection();
       }
     }
 

@@ -100,13 +100,13 @@ namespace NesaBotDesktop.Logic {
         }
 
         if (Properties.ApplicationSettings.Default.EnableDiscordBot) {
-          CheckSettingsForNull();
+          UtilLogic.CheckSettingsForNull();
           foreach (var mark in marks.Where(x => !Properties.DiscordSettings.Default.InformedMarks.Contains(x.Id))) {
             DiscordLogic.NewMark(mark);
           }
         }
 
-        CheckSettingsForNull();
+        UtilLogic.CheckSettingsForNull();
         if (Properties.ApplicationSettings.Default.PushNotifications && marks.Any(x => !Properties.ApplicationSettings.Default.PushNotificationsInformedMarks.Contains(x.Id))) {
           PopupLogic.ShowPushNotification("Neue Noten verfügbar", "Es wurden neue Noten veröffentlicht, schau doch mal vorbei");
 
@@ -195,16 +195,6 @@ namespace NesaBotDesktop.Logic {
       }
 
       return "";
-    }
-
-    private static void CheckSettingsForNull() {
-      if (Properties.DiscordSettings.Default.InformedMarks is null) {
-        Properties.DiscordSettings.Default.InformedMarks = new System.Collections.Specialized.StringCollection();
-      }
-
-      if (Properties.ApplicationSettings.Default.PushNotificationsInformedMarks is null) {
-        Properties.ApplicationSettings.Default.PushNotificationsInformedMarks = new System.Collections.Specialized.StringCollection();
-      }
     }
   }
 }

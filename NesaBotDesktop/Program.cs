@@ -81,7 +81,7 @@ namespace NesaBotDesktop {
 
       PopupLogic.TrayIcon = trayIcon;
 
-      DoDefaultStuff();
+      UtilLogic.DoDefaultStuff();
     }
 
     private void ShowDashboard(object sender, EventArgs e) {
@@ -93,20 +93,15 @@ namespace NesaBotDesktop {
 
       if (Application.OpenForms.OfType<DashboardForm>().Count() == 0) {
         dashboardForm = new DashboardForm();
-        Task.Run(() => dashboardForm.Show());
-      } else {
-        var form = Application.OpenForms.OfType<DashboardForm>().First();
-        form.Close();
-        dashboardForm = new DashboardForm();
-        Task.Run(() => dashboardForm.Show());
+        Task.Run(() => dashboardForm.ShowDialog());
       }
     }
 
     private void ShowSettings(object sender, EventArgs e) {
       if (Application.OpenForms.OfType<SettingsForm>().Count() == 0) {
         Task.Run(() => { 
-          settingsForm.ShowDialog(); 
-          DoDefaultStuff();
+          settingsForm.ShowDialog();
+          UtilLogic.DoDefaultStuff();
         });
       }
     }
@@ -115,7 +110,7 @@ namespace NesaBotDesktop {
       if (Application.OpenForms.OfType<LoginForm>().Count() == 0) {
         Task.Run(() => {
           loginForm.ShowDialog();
-          DoDefaultStuff();
+          UtilLogic.DoDefaultStuff();
         });
       }
     }
@@ -126,16 +121,6 @@ namespace NesaBotDesktop {
       trayIcon.Visible = false;
 
       Application.Exit();
-    }
-
-    private async void DoDefaultStuff() {
-      if (Properties.ApplicationSettings.Default.EnableDiscordBot && await DiscordLogic.IsTokenValid(Properties.ApplicationSettings.Default.DiscordBotToken)) {
-        DiscordLogic.Start(Properties.ApplicationSettings.Default.DiscordBotToken);
-      }
-
-      if (MarksLogic.IsLoginValid(Properties.NesaSettings.Default.URL, Properties.NesaSettings.Default.Username, Properties.NesaSettings.Default.Password)) {
-        MarksLogic.StartMainLoop();
-      }
     }
   }
 }
