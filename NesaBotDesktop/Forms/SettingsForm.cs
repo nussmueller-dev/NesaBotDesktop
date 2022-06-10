@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using NesaBotDesktop.Logic;
 
 namespace NesaBotDesktop {
   public partial class SettingsForm : Form {
@@ -22,7 +23,12 @@ namespace NesaBotDesktop {
       lb_botToken.Enabled = cb_activateDiscordBot.Checked;
     }
 
-    private void btn_save_Click(object sender, EventArgs e) {
+    private async void btn_save_Click(object sender, EventArgs e) {
+      if (cb_activateDiscordBot.Checked && !await DiscordLogic.IsTokenValid(tb_botToken.Text)) {
+        PopupLogic.ShowErrorMessage("Der Token ist ungültig", "Ungültiger Token");
+        return;
+      }
+
 #if (!DEBUG)
       RegistryKey? key = Registry.CurrentUser.OpenSubKey(_startupRegistryKey, true);
       try {

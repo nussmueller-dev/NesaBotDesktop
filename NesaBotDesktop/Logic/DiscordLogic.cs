@@ -7,16 +7,19 @@ namespace NesaBotDesktop.Logic {
     private static Task? _mainTask;
     private static bool _isStarted = false;
 
-    public static async Task<bool> CheckToken(string token) {
+    public static async Task<bool> IsTokenValid(string token) {
       if (_isStarted) {
         await Stop();
       }
 
-      try{
+      _client = new DiscordSocketClient();
+
+      try {
         await _client.LoginAsync(TokenType.Bot, token);
+        await _client.GetApplicationInfoAsync();
 
         return true;
-      }catch{
+      } catch {
         return false;
       }
     }
