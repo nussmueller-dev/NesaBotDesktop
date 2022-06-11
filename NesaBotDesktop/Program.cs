@@ -42,6 +42,15 @@ namespace NesaBotDesktop {
     private SettingsForm settingsForm = new SettingsForm();
 
     public NesaBotApplicationContext() {
+      if (!MarksLogic.IsLoginValid(Properties.NesaSettings.Default.URL, Properties.NesaSettings.Default.Username, Properties.NesaSettings.Default.Password)) {
+        loginForm.ShowDialog();
+
+        if (loginForm.DialogResult != DialogResult.OK) {
+          Application.Exit();
+          return;
+        }
+      }
+
       contextMenu = new ContextMenuStrip {};
 
       var dashboardItem = new ToolStripMenuItem() {

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NesaBotDesktop.Logic {
+﻿namespace NesaBotDesktop.Logic {
   internal class UtilLogic {
     internal static async void DoDefaultStuff() {
+      while (!MarksLogic.IsInternetAvailable()) {
+        Thread.Sleep(10000);
+      }
+
       if (Properties.ApplicationSettings.Default.EnableDiscordBot && await DiscordLogic.IsTokenValid(Properties.ApplicationSettings.Default.DiscordBotToken)) {
         DiscordLogic.Start(Properties.ApplicationSettings.Default.DiscordBotToken);
       }
