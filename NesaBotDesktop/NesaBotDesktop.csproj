@@ -7,11 +7,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PlatformTarget>x86</PlatformTarget>
-    <ApplicationIcon>Icons\app-icon.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\app-icon-3.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Icons\app-icon.ico" />
+    <Content Include="Icons\app-icon-3.ico" />
   </ItemGroup>
 
   <ItemGroup>
