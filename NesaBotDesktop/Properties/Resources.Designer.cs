@@ -129,5 +129,15 @@ namespace NesaBotDesktop.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Teacher {
+            get {
+                object obj = ResourceManager.GetObject("Teacher", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

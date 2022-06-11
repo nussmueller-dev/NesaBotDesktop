@@ -47,7 +47,7 @@ namespace NesaBotDesktop {
         loginForm.ShowDialog();
 
         if (loginForm.DialogResult != DialogResult.OK) {
-          Application.ExitThread();
+          Environment.Exit(0);
           return;
         }
       }
@@ -55,11 +55,11 @@ namespace NesaBotDesktop {
       if (!Properties.ApplicationSettings.Default.InitalSettingsSet) {
         settingsForm.ShowDialog();
 
-        if (loginForm.DialogResult == DialogResult.OK) {
+        if (settingsForm.DialogResult == DialogResult.OK) {
           Properties.ApplicationSettings.Default.InitalSettingsSet = true;
           Properties.ApplicationSettings.Default.Save();
         } else {
-          Application.ExitThread();
+          Environment.Exit(0);
           return;
         }
       }
@@ -142,7 +142,7 @@ namespace NesaBotDesktop {
 
       trayIcon.Visible = false;
 
-      Application.ExitThread();
+      Environment.Exit(0);
     }
   }
 }
