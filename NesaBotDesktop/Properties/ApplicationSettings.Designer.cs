@@ -93,5 +93,17 @@ namespace NesaBotDesktop.Properties {
                 this["PushNotificationsInformedMarks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool InitalSettingsSet {
+            get {
+                return ((bool)(this["InitalSettingsSet"]));
+            }
+            set {
+                this["InitalSettingsSet"] = value;
+            }
+        }
     }
 }

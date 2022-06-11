@@ -8,7 +8,7 @@ namespace NesaBotDesktop.Forms {
     }
 
     private void DashboardForm_Load(object sender, EventArgs e) {
-      Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+      Icon = UtilLogic.GetAppIcon();
     }
 
     private void pb_account_Click(object sender, EventArgs e) {

@@ -12,8 +12,9 @@ namespace NesaBotDesktop {
     /// </summary>
     [STAThread]
     static void Main() {
-      if (PriorProcess() != null) {
-        return;
+      var otherProcess = PriorProcess();
+      if (otherProcess != null) {
+        otherProcess.Kill();
       }
 
       Application.EnableVisualStyles();
@@ -46,7 +47,19 @@ namespace NesaBotDesktop {
         loginForm.ShowDialog();
 
         if (loginForm.DialogResult != DialogResult.OK) {
-          Application.Exit();
+          Application.ExitThread();
+          return;
+        }
+      }
+
+      if (!Properties.ApplicationSettings.Default.InitalSettingsSet) {
+        settingsForm.ShowDialog();
+
+        if (loginForm.DialogResult == DialogResult.OK) {
+          Properties.ApplicationSettings.Default.InitalSettingsSet = true;
+          Properties.ApplicationSettings.Default.Save();
+        } else {
+          Application.ExitThread();
           return;
         }
       }
@@ -80,7 +93,7 @@ namespace NesaBotDesktop {
       contextMenu.Items.Add(exitItem);
 
       trayIcon = new NotifyIcon() {
-        Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location),
+        Icon = UtilLogic.GetAppIcon(),
         Text = "NesaBot",
         ContextMenuStrip = contextMenu,
         Visible = true
@@ -129,7 +142,7 @@ namespace NesaBotDesktop {
 
       trayIcon.Visible = false;
 
-      Application.Exit();
+      Application.ExitThread();
     }
   }
 }

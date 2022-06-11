@@ -12,7 +12,7 @@ namespace NesaBotDesktop {
     }
 
     private void SettingsForm_Load(object sender, EventArgs e) {
-      Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+      Icon = UtilLogic.GetAppIcon();
 
       ns_interval.Value = Properties.ApplicationSettings.Default.Interval;
       cb_autostart.Checked = Properties.ApplicationSettings.Default.Autostart;

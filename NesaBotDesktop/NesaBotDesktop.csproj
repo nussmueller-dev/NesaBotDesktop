@@ -11,7 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Icons\app-icon-3.ico" />
+    <None Remove="Icons\app-icon-3.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\app-icon-3.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +56,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Icons\account.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Icons\arrow-left.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Icons\settings.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\ApplicationSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>ApplicationSettings.Designer.cs</LastGenOutput>

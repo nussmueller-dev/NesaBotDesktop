@@ -1,5 +1,9 @@
 ﻿namespace NesaBotDesktop.Logic {
   internal class UtilLogic {
+    internal static Icon GetAppIcon() {
+      return Properties.Resources.app_icon_3;
+    }
+
     internal static async void DoDefaultStuff() {
       while (!MarksLogic.IsInternetAvailable()) {
         Thread.Sleep(10000);

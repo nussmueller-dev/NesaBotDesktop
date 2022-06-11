@@ -8,7 +8,7 @@ namespace NesaBotDesktop {
     }
 
     private void LoginForm_Load(object sender, EventArgs e) {
-      Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
+      Icon = UtilLogic.GetAppIcon();
 
       tb_url.Text = Properties.NesaSettings.Default.URL;
       tb_username.Text = Properties.NesaSettings.Default.Username;
@@ -74,6 +74,7 @@ namespace NesaBotDesktop {
 
       Properties.NesaSettings.Default.Save();
 
+      DialogResult = DialogResult.OK;
       Close();
     }
   }
