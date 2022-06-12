@@ -138,7 +138,7 @@ namespace NesaBotDesktop.Logic {
       }
     }
 
-    private static string GetToken(string username, string password, string url, bool firstTry = true) {
+    private static string GetToken(string username, string password, string url) {
       url = NormalizeUrl(url);
       var loginHash = GetLoginHash(url);
 
