@@ -138,7 +138,7 @@ namespace NesaBotDesktop.Logic {
       }
     }
 
-    private static string GetToken(string username, string password, string url) {
+    private static string GetToken(string username, string password, string url, bool firstTry = true) {
       url = NormalizeUrl(url);
       var loginHash = GetLoginHash(url);
 
@@ -155,6 +155,18 @@ namespace NesaBotDesktop.Logic {
         return "";
       }
 
+      if (response.Content != null 
+        && response.Content.Contains("Externe Anbindung") 
+        && response.Content.Contains("Erlauben") 
+        && response.Content.Contains("Verweigern")
+      ) {
+        response = AcceptThirdPartyApp(uri, response.Content);
+
+        if (response is null) {
+          return "";
+        }
+      }
+
       if (response.ResponseUri!.AbsoluteUri.Contains("access_token")) {
         var accessTokenIndex = response.ResponseUri.AbsoluteUri.IndexOf("access_token");
         var accessTokenEndIndex = response.ResponseUri.AbsoluteUri.IndexOf("&", accessTokenIndex);
@@ -164,6 +176,30 @@ namespace NesaBotDesktop.Logic {
       }
 
       return "";
+    }
+
+    private static RestResponse AcceptThirdPartyApp(Uri uri, string responseContent) {
+      if (responseContent.Contains("form method='post'")) {
+        var formIndex = responseContent.IndexOf("form method='post'");
+        var formCloseIndex = responseContent.IndexOf(">", formIndex);
+        var actionIndex = responseContent.LastIndexOf("action", formCloseIndex);
+        var actionStartIndex = responseContent.IndexOf("'", actionIndex);
+        var actionEndIndex = responseContent.IndexOf("'", actionIndex + 9);
+
+        var wholeUrl = responseContent.Substring(actionStartIndex + 1, actionEndIndex - actionStartIndex - 1);
+        var idIndex = wholeUrl.LastIndexOf("id=");
+        var idText = wholeUrl.Substring(idIndex, wholeUrl.Length - idIndex);
+
+        uri = new Uri(uri.AbsoluteUri + "&" + idText);
+      } else {
+        return null;
+      }
+
+      var request = new RestRequest(uri, Method.Post);
+      request.Timeout = _timeout;
+      request.AlwaysMultipartFormData = true;
+      request.AddParameter("authorized", "yes");
+      return _restClient.Execute(request);
     }
 
     private static string GetLoginHash(string url) {
